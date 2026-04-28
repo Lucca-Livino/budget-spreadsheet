@@ -1,30 +1,597 @@
-* {
-    padding: 0;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ──────────────────────────────────────────
+   Design Tokens
+────────────────────────────────────────── */
+:root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --card: #1a2028;
+    --card-hover: #1f2433;
+    --border: rgba(255, 255, 255, 0.07);
+
+    --accent: #00ccbe;
+    --accent-soft: rgba(0, 204, 190, 0.15);
+    --green: #34d399;
+    --green-soft: rgba(52, 211, 153, 0.12);
+    --red: #f87171;
+    --red-soft: rgba(248, 113, 113, 0.12);
+    --amber: #fbbf24;
+
+    --text-primary: #f1f3f9;
+    --text-secondary: #8892a4;
+    --text-muted: #4b5568;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+    --transition: 0.2s ease;
+}
+
+/* ──────────────────────────────────────────
+   Reset & Base
+────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 14px;
+    min-height: 100vh;
+}
+
+/* ──────────────────────────────────────────
+   Header / Nav
+────────────────────────────────────────── */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 15, 20, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
 }
 
 .cabecalho {
-    justify-content: center;
-    margin: 0 auto;
-    color: #FFFFFF;
-    padding: 20px;
-    list-style: none;
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    list-style: none;
+    padding: 12px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.cabecalho_link{
+.cabecalho li {
     display: flex;
-    color: #000000;
+}
+
+.cabecalho_link {
+    display: inline-block;
+    color: var(--text-secondary);
     text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: color var(--transition), background var(--transition), border-color var(--transition);
 }
 
 .cabecalho_link:hover {
-    color: #000000;
+    color: var(--text-primary);
+    background: var(--accent-soft);
+    border-color: var(--accent);
 }
 
-h1{
+/* ──────────────────────────────────────────
+   Main Layout
+────────────────────────────────────────── */
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
     display: flex;
-    justify-content: center;
-    padding: 16px;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ──────────────────────────────────────────
+   Section Cards
+────────────────────────────────────────── */
+.receitas,
+.investimentos,
+.moradia,
+.transporte,
+.saude,
+.alimentacao,
+.gastos_pessoais,
+.cuidado_pessoal,
+.cartao,
+.balanco-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 36px;
+    box-shadow: var(--shadow-card);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.receitas:hover,
+.investimentos:hover,
+.moradia:hover,
+.transporte:hover,
+.saude:hover,
+.alimentacao:hover,
+.gastos_pessoais:hover,
+.cuidado_pessoal:hover,
+.cartao:hover,
+.balanco-section:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ──────────────────────────────────────────
+   Section Titles (h1)
+────────────────────────────────────────── */
+h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+h1::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: linear-gradient(180deg, var(--accent), #09a6a3);
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────
+   Row: label + input
+────────────────────────────────────────── */
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background var(--transition);
+    border-radius: var(--radius-sm);
+}
+
+.input-row:last-of-type {
+    border-bottom: none;
+}
+
+.input-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.input-label {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+    flex: 1;
+    min-width: 0;
+}
+
+/* ──────────────────────────────────────────
+Inputs (number)
+────────────────────────────────────────── */
+input[type="number"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    width: 160px;
+    text-align: right;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="number"]::placeholder {
+    color: var(--text-muted);
+}
+
+input[type="number"]:focus {
+    border-color: var(--accent);
+    background: rgba(0, 204, 190, 0.06);
+    box-shadow: 0 0 0 3px rgba(0, 204, 190, 0.15);
+}
+
+input[type="number"]:hover:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ──────────────────────────────────────────
+   Subtotals
+────────────────────────────────────────── */
+.total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(0, 204, 190, 0.2);
+    border-radius: var(--radius-md);
+}
+
+.total-row-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.total-row-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+}
+
+/* ──────────────────────────────────────────
+   Balanço (summary section)
+────────────────────────────────────────── */
+.balanco-section {
+    border-color: rgba(0, 204, 190, 0.2);
+}
+
+.balanco-section h1::before {
+    background: linear-gradient(180deg, var(--green), #34d399);
+}
+
+.balanco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.balanco-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px 22px;
+    transition: transform var(--transition), border-color var(--transition);
+}
+
+.balanco-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.balanco-card-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.balanco-card-value {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+}
+
+.balanco-card--receitas .balanco-card-value {
+    color: var(--green);
+}
+
+.balanco-card--despesas .balanco-card-value {
+    color: var(--red);
+}
+
+.balanco-card--saldo-pos .balanco-card-value {
+    color: var(--green);
+}
+
+.balanco-card--saldo-neg .balanco-card-value {
+    color: var(--red);
+}
+
+.balanco-card--invest .balanco-card-value {
+    color: var(--accent);
+}
+
+/* ──────────────────────────────────────────
+   Responsive
+────────────────────────────────────────── */
+@media (max-width: 640px) {
+    main {
+        padding: 24px 16px 60px;
+    }
+
+    .receitas,
+    .investimentos,
+    .moradia,
+    .transporte,
+    .saude,
+    .alimentacao,
+    .gastos_pessoais,
+    .cuidado_pessoal,
+    .cartao,
+    .balanco-section {
+        padding: 24px 20px;
+    }
+
+    input[type="number"] {
+        width: 120px;
+    }
+
+    .balanco-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ──────────────────────────────────────────
+   Botão Salvar PDF
+────────────────────────────────────────── */
+.btn-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), #09a6a3);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    outline: none;
+    transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+    box-shadow: 0 2px 12px rgba(0, 204, 190, 0.4);
+}
+
+.btn-pdf:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0, 204, 190, 0.55);
+}
+
+.btn-pdf:active {
+    transform: scale(0.97);
+}
+
+/* ──────────────────────────────────────────
+   Cabeçalho de impressão (oculto na tela)
+────────────────────────────────────────── */
+.print-header {
+    display: none;
+}
+
+/* ──────────────────────────────────────────
+   @media print — layout para PDF
+────────────────────────────────────────── */
+@media print {
+
+    /* Reset de cores: fundo branco, texto escuro */
+    :root {
+        --bg: #ffffff;
+        --surface: #f5f6fa;
+        --card: #ffffff;
+        --card-hover: #ffffff;
+        --border: #e2e5ed;
+        --accent: #09a6a3;
+        --accent-soft: #d0f7f4;
+        --green: #059669;
+        --green-soft: #d1fae5;
+        --red: #dc2626;
+        --red-soft: #fee2e2;
+        --text-primary: #111827;
+        --text-secondary: #374151;
+        --text-muted: #6b7280;
+        --shadow-card: none;
+    }
+
+    html,
+    body {
+        background: #fff;
+        color: #111827;
+        font-size: 11pt;
+    }
+
+    /* Ocultar elementos de navegação/interação */
+    header,
+    .btn-pdf {
+        display: none !important;
+    }
+
+    /* Mostrar cabeçalho de impressão */
+    .print-header {
+        display: block;
+        text-align: center;
+        padding: 0 0 20px;
+        margin-bottom: 16px;
+        border-bottom: 2px solid #09a6a3;
+    }
+
+    .print-title {
+        font-size: 20pt;
+        font-weight: 700;
+        color: #09a6a3;
+        margin-bottom: 4px;
+    }
+
+    .print-date {
+        font-size: 10pt;
+        color: #6b7280;
+    }
+
+    /* Layout de impressão */
+    main {
+        max-width: 100%;
+        padding: 0;
+        gap: 16px;
+    }
+
+    /* Cards: borda sólida, sem sombra */
+    .receitas,
+    .investimentos,
+    .moradia,
+    .transporte,
+    .saude,
+    .alimentacao,
+    .gastos_pessoais,
+    .cuidado_pessoal,
+    .cartao,
+    .balanco-section {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 16px 20px;
+        box-shadow: none;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Garantir que a seção de balanço fique na mesma página */
+    .balanco-section {
+        page-break-before: auto;
+    }
+
+    h1 {
+        font-size: 13pt;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        color: #111827;
+        border-bottom-color: #e5e7eb;
+    }
+
+    h1::before {
+        background: #00ccbe;
+    }
+
+    /* Linhas de input */
+    .input-row {
+        border-bottom-color: #f3f4f6;
+        padding: 6px 0;
+    }
+
+    .input-label {
+        color: #374151;
+        font-size: 10pt;
+    }
+
+    /* Mostrar o valor digitado no lugar do input */
+    input[type="number"] {
+        border: none;
+        background: transparent;
+        color: #111827;
+        font-size: 10pt;
+        font-weight: 600;
+        text-align: right;
+        width: auto;
+        padding: 0;
+    }
+
+    /* Subtotais */
+    .total-row {
+        background: #d0f7f4;
+        border-color: #a8e9e4;
+        padding: 10px 14px;
+        margin-top: 12px;
+    }
+
+    .total-row-label {
+        color: #374151;
+        font-size: 10pt;
+    }
+
+    .total-row-value {
+        font-size: 11pt;
+        color: #00ccbe;
+    }
+
+    /* Cards do balanço */
+    .balanco-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .balanco-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        padding: 14px 16px;
+        border-radius: 8px;
+    }
+
+    .balanco-card-label {
+        color: #6b7280;
+        font-size: 8pt;
+    }
+
+    .balanco-card-value {
+        font-size: 14pt;
+    }
+
+    .balanco-card--receitas .balanco-card-value {
+        color: #059669;
+    }
+
+    .balanco-card--despesas .balanco-card-value {
+        color: #dc2626;
+    }
+
+    .balanco-card--saldo-pos .balanco-card-value {
+        color: #059669;
+    }
+
+    .balanco-card--saldo-neg .balanco-card-value {
+        color: #dc2626;
+    }
+
+    .balanco-card--invest .balanco-card-value {
+        color: #00ccbe;
+    }
+
+    /* Links sem destaque */
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
 }
