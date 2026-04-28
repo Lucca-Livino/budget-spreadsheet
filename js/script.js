@@ -1,251 +1,147 @@
-function somarTotalDespesas() {
-  const idsResultados = [
-    'resultado_investimentos',
-    'resultado_moradia',
-    'resultado_transporte',
-    'resultado_saude',
-    'resultado_alimentacao',
-    'resultado_pessoais',
-    'resultado_cuidados',
-    'resultado_cartao'
-  ];
 
-  let total = 0;
-
-  idsResultados.forEach(id => {
-    const valor = parseFloat(document.getElementById(id).innerText);
-    if (!isNaN(valor)) {
-      total += valor;
-    }
-  });
-
-  document.getElementById('total_despesas').innerText = total;
-
-  calcularSaldo()
+function salvarPDF() {
+  // Preenche a data no cabeçalho de impressão (ex: "Abril / 2026")
+  const agora = new Date();
+  const mes = agora.toLocaleString('pt-BR', { month: 'long' });
+  const ano = agora.getFullYear();
+  const dataEl = document.getElementById('print-date');
+  if (dataEl) {
+    dataEl.textContent =
+      mes.charAt(0).toUpperCase() + mes.slice(1) + ' / ' + ano;
+  }
+  window.print();
 }
 
-function somarValoresReceitas() {
-    let inputs = document.querySelectorAll('.input_receitas');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_receitas').innerText = soma;
-
-    document.getElementById('total_receitas_balanco').innerText = soma;
-
-    calcularSaldo()
-
-  }
-  
-  const inputsReceitas = document.querySelectorAll('.input_receitas');
-  inputsReceitas.forEach(input => {
-    input.addEventListener('input', somarValoresReceitas);
+function formatBRL(valor) {
+  return valor.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
-  
+}
 
+
+const totais = {
+  receitas:       0,
+  investimentos:  0,
+  moradia:        0,
+  transporte:     0,
+  saude:          0,
+  alimentacao:    0,
+  pessoais:       0,
+  cuidados:       0,
+  cartao:         0,
+};
+
+function somarInputs(seletor) {
+  let soma = 0;
+  document.querySelectorAll(seletor).forEach(input => {
+    const valor = parseFloat(input.value);
+    if (!isNaN(valor) && valor > 0) soma += valor;
+  });
+  return soma;
+}
+
+
+function atualizarBalanco() {
+
+  const totalDespesas =
+    totais.moradia +
+    totais.transporte +
+    totais.saude +
+    totais.alimentacao +
+    totais.pessoais +
+    totais.cuidados +
+    totais.cartao;
+
+  const saldo = totais.receitas - (totais.investimentos + totalDespesas);
+
+  
+  document.getElementById('total_receitas_balanco').innerText    = formatBRL(totais.receitas);
+  document.getElementById('total_investimento_balanco').innerText = formatBRL(totais.investimentos);
+  document.getElementById('total_despesas').innerText            = formatBRL(totalDespesas);
+  document.getElementById('total_saldo').innerText               = formatBRL(saldo);
+
+
+  const saldoCard = document.getElementById('saldo_card');
+  if (saldoCard) {
+    saldoCard.classList.remove('balanco-card--saldo-pos', 'balanco-card--saldo-neg');
+    saldoCard.classList.add(saldo >= 0 ? 'balanco-card--saldo-pos' : 'balanco-card--saldo-neg');
+  }
+}
+
+
+
+function somarValoresReceitas() {
+  totais.receitas = somarInputs('.input_receitas');
+  document.getElementById('resultado_receitas').innerText = formatBRL(totais.receitas);
+  atualizarBalanco();
+}
 
 function somarValoresInvestimentos() {
-    let inputs = document.querySelectorAll('.inputs_investimentos');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_investimentos').innerText = soma;
-
-    document.getElementById('total_investimento_balanco').innerText = soma;
-  }
-  
-  const inputsInvestimentos = document.querySelectorAll('.inputs_investimentos');
-  inputsInvestimentos.forEach(input => {
-    input.addEventListener('input', somarValoresInvestimentos);
-  });
-
-  
+  totais.investimentos = somarInputs('.inputs_investimentos');
+  document.getElementById('resultado_investimentos').innerText = formatBRL(totais.investimentos);
+  atualizarBalanco();
+}
 
 function somarValoresMoradia() {
-    let inputs = document.querySelectorAll('.inputs_moradia');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_moradia').innerText = soma;
-
-  somarTotalDespesas()
-    
-  }
-  
-  const inputsMoradia = document.querySelectorAll('.inputs_moradia');
-  inputsMoradia.forEach(input => {
-    input.addEventListener('input', somarValoresMoradia);
-  });
-
-
+  totais.moradia = somarInputs('.inputs_moradia');
+  document.getElementById('resultado_moradia').innerText = formatBRL(totais.moradia);
+  atualizarBalanco();
+}
 
 function somarValoresTransporte() {
-    let inputs = document.querySelectorAll('.inputs_transporte');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_transporte').innerText = soma;
-
-    somarTotalDespesas()
-  }
-  
-  const inputsTransporte = document.querySelectorAll('.inputs_transporte');
-  inputsTransporte.forEach(input => {
-    input.addEventListener('input', somarValoresTransporte);
-  });
-
-
+  totais.transporte = somarInputs('.inputs_transporte');
+  document.getElementById('resultado_transporte').innerText = formatBRL(totais.transporte);
+  atualizarBalanco();
+}
 
 function somarValoresSaude() {
-    let inputs = document.querySelectorAll('.inputs_saude');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_saude').innerText = soma;
-
-    somarTotalDespesas()
-  }
-  
-  const inputsSaude = document.querySelectorAll('.inputs_saude');
-  inputsSaude.forEach(input => {
-    input.addEventListener('input', somarValoresSaude);
-  });
-
-
+  totais.saude = somarInputs('.inputs_saude');
+  document.getElementById('resultado_saude').innerText = formatBRL(totais.saude);
+  atualizarBalanco();
+}
 
 function somarValoresAlimentacao() {
-    let inputs = document.querySelectorAll('.inputs_alimentacao');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_alimentacao').innerText = soma;
-
-    somarTotalDespesas()
-  }
-  
-  const inputsAlimentacao = document.querySelectorAll('.inputs_alimentacao');
-  inputsAlimentacao.forEach(input => {
-    input.addEventListener('input', somarValoresAlimentacao);
-  });
-
-
+  totais.alimentacao = somarInputs('.inputs_alimentacao');
+  document.getElementById('resultado_alimentacao').innerText = formatBRL(totais.alimentacao);
+  atualizarBalanco();
+}
 
 function somarValoresPessoais() {
-    let inputs = document.querySelectorAll('.inputs_pessoais');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_pessoais').innerText = soma;
-
-    somarTotalDespesas()
-  }
-  
-  const inputsPessoais = document.querySelectorAll('.inputs_pessoais');
-  inputsPessoais.forEach(input => {
-    input.addEventListener('input', somarValoresPessoais);
-  });
-
-
+  totais.pessoais = somarInputs('.inputs_pessoais');
+  document.getElementById('resultado_pessoais').innerText = formatBRL(totais.pessoais);
+  atualizarBalanco();
+}
 
 function somarValoresCuidados() {
-    let inputs = document.querySelectorAll('.inputs_cuidados');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_cuidados').innerText = soma;
+  totais.cuidados = somarInputs('.inputs_cuidados');
+  document.getElementById('resultado_cuidados').innerText = formatBRL(totais.cuidados);
+  atualizarBalanco();
+}
 
-    somarTotalDespesas()
-  }
-  
-  const inputsCuidados = document.querySelectorAll('.inputs_cuidados');
-  inputsCuidados.forEach(input => {
-    input.addEventListener('input', somarValoresCuidados);
+function somarValoresCartao() {
+  totais.cartao = somarInputs('.inputs_cartao');
+  document.getElementById('resultado_cartao').innerText = formatBRL(totais.cartao);
+  atualizarBalanco();
+}
+
+
+const mapeamento = [
+  { seletor: '.input_receitas',        handler: somarValoresReceitas       },
+  { seletor: '.inputs_investimentos',  handler: somarValoresInvestimentos  },
+  { seletor: '.inputs_moradia',        handler: somarValoresMoradia        },
+  { seletor: '.inputs_transporte',     handler: somarValoresTransporte     },
+  { seletor: '.inputs_saude',          handler: somarValoresSaude          },
+  { seletor: '.inputs_alimentacao',    handler: somarValoresAlimentacao    },
+  { seletor: '.inputs_pessoais',       handler: somarValoresPessoais       },
+  { seletor: '.inputs_cuidados',       handler: somarValoresCuidados       },
+  { seletor: '.inputs_cartao',         handler: somarValoresCartao         },
+];
+
+mapeamento.forEach(({ seletor, handler }) => {
+  document.querySelectorAll(seletor).forEach(input => {
+    input.addEventListener('input', handler);
   });
-
-
-
-  function somarValoresCartao() {
-    let inputs = document.querySelectorAll('.inputs_cartao');
-    let soma = 0;
-  
-    inputs.forEach(function(input) {
-      let valor = parseFloat(input.value);
-      if (!isNaN(valor)) {
-        soma += valor;
-      }
-    });
-  
-    document.getElementById('resultado_cartao').innerText = soma;
-
-    somarTotalDespesas()
-  }
-  
-  const inputsCartao = document.querySelectorAll('.inputs_cartao');
-  inputsCartao.forEach(input => {
-    input.addEventListener('input', somarValoresCartao);
-  });
-
-
-
-function calcularSaldo() {
-    const totalReceitas = parseFloat(document.getElementById('total_receitas_balanco').innerText) || 0;
-    const totalInvestimentos = parseFloat(document.getElementById('total_investimento_balanco').innerText) || 0;
-    const totalDespesas = parseFloat(document.getElementById('total_despesas').innerText) || 0;
-  
-    const saldo = totalReceitas - (totalInvestimentos + totalDespesas);
-  
- 
-    const saldoSpan = document.getElementById('total_saldo');
-    if (saldoSpan) {
-      saldoSpan.innerText = saldo;
-    }
-  }
-  
+});
