@@ -1,5 +1,3 @@
----
-
 # 💰 Budget Spreadsheet
 
 A personal budget spreadsheet running directly in the browser — no backend, no dependencies, no hassle. Organize your **income**, **expenses**, and **investments** in one place and track your monthly balance in real time.
